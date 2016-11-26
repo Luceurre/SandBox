@@ -1,4 +1,7 @@
-import pygame, Rect, math
+import Rect
+import math
+import pygame
+
 from ActorType import ActorType
 
 
@@ -98,7 +101,8 @@ class Actor:
 
         return actors_collided
 
+    # Gestion des évènements
 
-
-
-
+    def event_handler(self, event):
+        """Renvoie True si l'Actor gère l'évènement, False si elle le gère mais veut le laisser dans la pile ou ne le gère pas"""
+        return False

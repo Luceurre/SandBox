@@ -34,6 +34,17 @@ class Stage:
 
         self.screen.fill((0, 0, 0))
 
+        events = pygame.event.get()
+
+        i = 0
+        for event in events:
+            if (self.event_handler(event)):
+                events.pop(i)
+            else:
+                for actor in self.actors:
+                    if (actor.event_handler(event)):
+                        events.pop(i)
+
         for actor in self.actors:
             if(actor.active):
                 actor.update(delta)
@@ -44,6 +55,8 @@ class Stage:
     def draw(self):
         pygame.display.flip()
 
+    # Gestion des évènements
 
-
-
+    def event_handler(self, event):
+        """Renvoie True si l'Actor gère l'évènement, False si elle le gère mais veut le laisser dans la pile ou ne le gère pas"""
+        return False

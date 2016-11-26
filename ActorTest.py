@@ -1,4 +1,6 @@
-import Actor, pygame
+import Actor
+import pygame
+
 
 class ActorTest(Actor.Actor):
     """Juste un jouet"""
@@ -20,3 +22,10 @@ class ActorTest(Actor.Actor):
                     self.screen = screen
         else:
             self.screen.blit(self.image, self.rect)
+
+    def event_handler(self, event):
+        if (event.type == pygame.KEYDOWN):
+            self.move_by(5, 5)
+            return True
+        else:
+            return False
