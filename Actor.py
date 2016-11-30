@@ -1,7 +1,8 @@
-import Rect
 import math
+
 import pygame
 
+import Rect
 from ActorType import ActorType
 
 
@@ -85,8 +86,14 @@ class Actor:
     def move_by(self, x, y):
         self.rect.move_ip(x, y)
 
-    def draw(self, screen = None):
+    def draw(self, screen=None, camera=None):
         """Methode où l'objet doit être affiché"""
+
+        if (self.screen == None):
+            if (screen == None):
+                print("[ERROR] Ecran non défini")
+            else:
+                self.screen = screen
 
     def update(self, delta):
         """Méthode où l'objet doit être mis à jour, avec delta le temps écoulé"""

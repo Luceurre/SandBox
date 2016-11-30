@@ -11,6 +11,7 @@ class Stage:
         self.actors = []
         self.delta = 0.01
         self.screen = screen
+        self.camera = None
 
         self.id = Stage.ids
         Stage.stages.append(self)
@@ -39,17 +40,17 @@ class Stage:
         i = 0
         for event in events:
             if (self.event_handler(event)):
-                events.pop(i)
+                pass
             else:
                 for actor in self.actors:
                     if (actor.event_handler(event)):
-                        events.pop(i)
+                        pass
 
         for actor in self.actors:
             if(actor.active):
                 actor.update(delta)
             if(actor.drawable):
-                actor.draw()
+                actor.draw(camera=self.camera)
         return self
 
     def draw(self):

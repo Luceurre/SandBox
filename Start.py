@@ -10,4 +10,6 @@ menu.act().draw()
 pygame.time.wait(1500)
 
 while 1:
+    delta = pygame.time.get_ticks()
     menu.act().draw()
+    pygame.display.set_caption(str(1000 / (pygame.time.get_ticks() - delta + 0.00000000001)))

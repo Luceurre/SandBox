@@ -1,5 +1,6 @@
-import Actor
 import pygame
+
+import Actor
 
 
 class ActorTest(Actor.Actor):
@@ -11,21 +12,14 @@ class ActorTest(Actor.Actor):
         self.set_image(image)
         self.set_position(0, 0)
 
-    def draw(self, screen = None, save_screen = True):
+    def draw(self, screen=None, camera=None):
         super().draw(screen)
-        if(self.screen == None):
-            if(screen == None):
-                print("[ERROR] Ecran non défini")
-            else:
-                screen.blit(self.image, self.rect)
-                if(save_screen):
-                    self.screen = screen
-        else:
-            self.screen.blit(self.image, self.rect)
+
+        rect = self.rect
+        if (camera != None):
+            rect = camera.translate(rect)
+
+        self.screen.blit(self.image, rect)
 
     def event_handler(self, event):
-        if (event.type == pygame.KEYDOWN):
-            self.move_by(5, 5)
-            return True
-        else:
-            return False
+        pass
