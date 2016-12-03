@@ -1,5 +1,8 @@
 import pygame
 
+from Clock import Clock
+
+
 class Stage:
     """Chaque scène a ses propres acteurs, actions et fonctions. Par exemple, le menu et l'écran de jeu seront deux scènes diffèrentes"""
 
@@ -9,9 +12,10 @@ class Stage:
     def __init__(self, screen):
 
         self.actors = []
-        self.delta = 0.01
         self.screen = screen
         self.camera = None
+
+        self.clock = Clock()
 
         self.id = Stage.ids
         Stage.stages.append(self)
@@ -29,13 +33,19 @@ class Stage:
                 self.actors.pop(i)
             i += 1
 
+    def set_framerate(self, framerate):
+        self.clock.framerate = framerate
+
     def act(self, delta = None):
         """Tout affichage doit se faire dans act"""
-        delta = self.delta if(delta == None) else  delta
+        self.clock.update()
+        delta = self.clock.delta
 
         self.screen.fill((0, 0, 0))
 
         events = pygame.event.get()
+
+        self.actors = sorted(self.actors, key=lambda actor: actor.z)
 
         i = 0
         for event in events:
@@ -49,11 +59,14 @@ class Stage:
         for actor in self.actors:
             if(actor.active):
                 actor.update(delta)
-            if(actor.drawable):
-                actor.draw(camera=self.camera)
+
         return self
 
     def draw(self):
+        for actor in self.actors:
+            if (actor.drawable):
+                actor.draw(camera=self.camera)
+
         pygame.display.flip()
 
     # Gestion des évènements

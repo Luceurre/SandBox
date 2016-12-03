@@ -13,22 +13,24 @@ class Actor:
     ids = 0
 
     def __init__(self):
-        self.rect = Rect.Rect((0, 0), (0, 0))
+        self.rect = Rect.Rect(0, 0, 0, 0)
         self.image = None
         self.image_save = None
         self.screen = None
+        self.camera = None
         self.actor_type = ActorType.DEFAULT
         self.rotation = 0
         self.id = Actor.ids
         self.active = True
         self.drawable = True
+        self.z = 0
 
         Actor.actors.append(self)
         Actor.ids += 1
 
     def set_width(self, width):
         self.rect.width = width
-        self.image = pygame.transform.smoothscale(self.image_save, self.rect.size)
+        self.image = pygame.transform.smoothscale(self.image_save, self.rect.get_size())
 
     def set_height(self, height):
         self.rect.height = height
@@ -95,6 +97,18 @@ class Actor:
             else:
                 self.screen = screen
 
+        rect = self.rect
+        if (self.camera == None):
+            if (camera == None):
+                rect = self.rect
+            else:
+                self.camera = camera
+                rect = self.camera.translate(self.rect.get_pyrect())
+        else:
+            rect = self.camera.translate(self.rect.get_pyrect())
+
+        self.screen.blit(self.image, rect)
+
     def update(self, delta):
         """Méthode où l'objet doit être mis à jour, avec delta le temps écoulé"""
 
@@ -107,6 +121,10 @@ class Actor:
                     actors_collided.append(actor)
 
         return actors_collided
+
+    def out_of_screen(self):
+        return (
+        self.rect.x <= 0 or self.rect.x + self.rect.width >= self.screen.get_width() or self.rect.y <= 0 or self.screen.get_height() <= self.rect.y + self.rect.height)
 
     # Gestion des évènements
 
